@@ -37,31 +37,8 @@
 - **[实机验收清单](docs/04-验收与已知问题.md)**：明确“已通过 / 未通过 / 未测试”。
 - **[来源、版权和安全](docs/05-来源版权与安全.md)**：上游来源、贡献范围及为何不发布第三方 ROM / 含个人原始分区的二进制。
 
+- **[Armbian 无桌面管理节点经验](docs/06-Armbian-无桌面节点部署经验.md)**：同一板型的独立 Linux 分支，记录 ophub Armbian、eMMC 冷启动验收、RTL8189FS、网络能力和未验证边界；不提供固件或本机备份。
+
+> Android 6 与 Armbian 是两条独立系统路径。本文档中的 Android 6 结论不能直接套用到 Armbian，反之亦然。
+
 ## 最重要的避坑提示
-
-**以下两个镜像都有真实实验记录，但都不能当成“亲测可直接一键通刷”的成品：**
-
-| 镜像 | SHA256 | 本机结论 |
-|---|---|---|
-| `S905L_6.0.1_TWRP.img`（通用候选） | `5d199b575b9617b60f5a180ed14a98803bab2905b4c3445682fcb4ec87d5f16e` | **不建议原样全量刷**：引导、设备树和分区差异；曾进入 TWRP 循环 |
-| `E900V21C_P211_Android6.0.1_USB.img`（2026-11-15 本机实验构建） | `fc64be1d185f7d94a24fc40988eaa09e6e87b88cf25a990a768cb08cdc866185` | **不是独立可用的最终安全包**：没有 Bootloader payload；实际 Windows GUI 擦除选项开启，刷后无 HDMI，需恢复原机 FIP |
-
-**绝对不要**看到“烧录进度 100%”就认定刷机完成；要拔掉 USB 数据线，冷启动并验收 Android 版本、HDMI、网口、遥控器与重启。
-
-尤其警惕 Windows USB Burning Tool 的 **Erase flash** 和 **Erase bootloader**：镜像内的 `aml_sdc_burn.ini` 写着 0，**不等于 GUI 里的选项也是 0**。本机事故恰恰证明两者会出现矛盾。
-
-## 不在此仓库的内容
-
-- 不发布完整 Android 固件、ROM、原厂 Bootloader/FIP、`system.img`、`recovery.img`、设备唯一标识、密钥、电视业务接口、IPTV 播放列表或家庭网络配置。
-- 不提供“复制另一个人 FIP 到你的盒子”的步骤。
-- 不声称 2026 年的 Android 6 适合处理敏感数据或暴露公网服务；本次 ROM 为 `userdebug / test-keys`，ADB 授权后可高权限操作，且旧版系统补丁过时。
-
-如果你只是想稳定使用电视盒子，**原固件能满足需要就不要为了升级而冒险刷写**。本仓库最有用的部分是**板型识别、备份、镜像审计以及黑屏复盘**。
-
-## 致谢与关联
-
-这份记录独立整理自一台 E900V21C 的 2026-11-10 至 11-16 实验，并非官方固件。通用 S905L ROM 的上游资料来自 [Ubuntu5020/AmLogic-S905L](https://github.com/Ubuntu5020/AmLogic-S905L)；Amlogic 镜像检查工具可参考 [natinusala/linux-amlogic-toolkit](https://github.com/natinusala/linux-amlogic-toolkit)。以上链接仅供研究原始来源，**不意味着其任一镜像适合你的 E900V21C**。
-
-欢迎提交**脱敏**设备树信息、主板照片与验证结果。请勿上传序列号、MAC、Token、证书、完整分区/密钥备份。
-
-文档及本仓库原创文本采用 [MIT License](LICENSE)；第三方厂商固件与工具**不因本仓库许可证而获得重新分发授权**。
